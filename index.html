@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Gems Jewelry</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <img src="assets/logo.png" alt="Elegant Gems Jewelry" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Order</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Discover Elegant Jewelry</h1>
+            <p>Handcrafted designs that sparkle with your style.</p>
+            <a href="#products" class="btn">Shop Now</a>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Featured Products</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="assets/product1.jpg" alt="Gold Necklace">
+                    <h3>Gold Necklace</h3>
+                    <p>$120</p>
+                    <a href="#contact" class="btn">Order Now</a>
+                </div>
+                <div class="product-card">
+                    <img src="assets/product2.jpg" alt="Silver Earrings">
+                    <h3>Silver Earrings</h3>
+                    <p>$80</p>
+                    <a href="#contact" class="btn">Order Now</a>
+                </div>
+                <div class="product-card">
+                    <img src="assets/product3.jpg" alt="Diamond Ring">
+                    <h3>Diamond Ring</h3>
+                    <p>$250</p>
+                    <a href="#contact" class="btn">Order Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Us</h2>
+            <p>Elegant Gems Jewelry has been crafting beautiful, high-quality jewelry for over a decade. Each piece is designed to capture elegance and timeless style.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Place an Order</h2>
+            <p>To order a product or make an inquiry, please fill out the form below.</p>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="product">Product of Interest</label>
+                    <input type="text" id="product" class="form-control" placeholder="e.g., Gold Necklace">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message / Special Requests</label>
+                    <textarea id="message" rows="5" class="form-control" required></textarea>
+                </div>
+                <button type="submit" class="btn" style="display:block; margin: 0 auto;">Submit Order</button>
+                <p id="form-status"></p>
+            </form>
+            </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Elegant Gems Jewelry. All rights reserved.</p>
+            <div class="socials">
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const contactForm = document.getElementById('contactForm');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', e => {
+            e.preventDefault();
+            formStatus.textContent = 'Sending...';
+            formStatus.style.color = '#333';
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                product: document.getElementById('product').value,
+                message: document.getElementById('message').value
+            };
+            
+            // IMPORTANT: Replace this placeholder with your actual AWS API Gateway endpoint URL!
+            const apiEndpoint = 'https://4td14eke9e.execute-api.eu-north-1.amazonaws.com/prod/contact';
+
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                formStatus.textContent = 'Thank you! Your order has been submitted successfully.';
+                formStatus.style.color = 'green';
+                contactForm.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                formStatus.textContent = 'An error occurred. Please try again later.';
+                formStatus.style.color = 'red';
+            });
+        });
+    </script>
+</body>
+</html>
